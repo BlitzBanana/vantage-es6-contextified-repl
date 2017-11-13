@@ -32,7 +32,7 @@ export const formatResult = result => {
   } else if (_.isObject(result)) {
     return formatObject(result)
   }
-  return formatString(result.toString())
+  return formatString(result)
 }
 
 export const run = (vm, command) =>
@@ -51,7 +51,7 @@ export const run = (vm, command) =>
 
 export default function(vantage, options = {}) {
   const mode = options.mode || 'repl'
-  const delimiter = options.mode || 'repl:'
+  const delimiter = options.delimiter || 'repl:'
   const sandbox = Object.assign({}, { _, Promise }, options.context)
   const vm = new VM({ sandbox, compiler })
 
@@ -62,7 +62,9 @@ export default function(vantage, options = {}) {
       this.log("Entering REPL Mode. To exit, type 'exit'")
       cb(undefined, "Entering REPL Mode. To exit, type 'exit'.")
     })
-    .action(command =>
-      run(vm, command).then(result => Promise.resolve(formatResult(result)))
-    )
+    .action((command, cb) => {
+      run(vm, command)
+        .then(result => Promise.resolve(formatResult(result)))
+        .then(output => cb(undefined, output))
+    })
 }

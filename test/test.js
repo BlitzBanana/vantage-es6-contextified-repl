@@ -42,6 +42,17 @@ test('vantage string', async t => {
   t.is(result, chalk.white('9000'))
 })
 
+test('vantage undefined', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, { context: { awesome: undefined } })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.is(result, chalk.white('undefined'))
+})
+
 test('vantage another mode', async t => {
   const vantage = new Vantage()
   vantage.use(repl, { mode: 'awesome-repl', context: { awesome: '9000' } })

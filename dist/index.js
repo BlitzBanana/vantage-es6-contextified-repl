@@ -10,7 +10,7 @@ exports.default = function(vantage) {
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
 
   var mode = options.mode || 'repl'
-  var delimiter = options.mode || 'repl:'
+  var delimiter = options.delimiter || 'repl:'
   var sandbox = Object.assign(
     {},
     { _: _lodash2.default, Promise: _bluebird2.default },
@@ -25,10 +25,14 @@ exports.default = function(vantage) {
       this.log("Entering REPL Mode. To exit, type 'exit'")
       cb(undefined, "Entering REPL Mode. To exit, type 'exit'.")
     })
-    .action(function(command) {
-      return run(vm, command).then(function(result) {
-        return _bluebird2.default.resolve(formatResult(result))
-      })
+    .action(function(command, cb) {
+      run(vm, command)
+        .then(function(result) {
+          return _bluebird2.default.resolve(formatResult(result))
+        })
+        .then(function(output) {
+          return cb(undefined, output)
+        })
     })
 }
 
@@ -101,7 +105,7 @@ var formatResult = (exports.formatResult = function formatResult(result) {
   } else if (_lodash2.default.isObject(result)) {
     return formatObject(result)
   }
-  return formatString(result.toString())
+  return formatString(result.toString ? result.toString() : result)
 })
 
 var run = (exports.run = function run(vm, command) {
