@@ -62,9 +62,9 @@ export default function(vantage, options = {}) {
       this.log("Entering REPL Mode. To exit, type 'exit'")
       cb(undefined, "Entering REPL Mode. To exit, type 'exit'.")
     })
-    .action((command, cb) => {
-      run(vm, command)
+    .action(command => {
+      return run(vm, command)
         .then(result => Promise.resolve(formatResult(result)))
-        .then(output => cb(undefined, output))
+        .tap(output => this.log(output))
     })
 }

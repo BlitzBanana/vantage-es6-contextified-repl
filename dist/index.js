@@ -6,6 +6,8 @@ Object.defineProperty(exports, '__esModule', {
 exports.run = exports.formatResult = exports.compiler = undefined
 
 exports.default = function(vantage) {
+  var _this = this
+
   var options =
     arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
 
@@ -25,13 +27,13 @@ exports.default = function(vantage) {
       this.log("Entering REPL Mode. To exit, type 'exit'")
       cb(undefined, "Entering REPL Mode. To exit, type 'exit'.")
     })
-    .action(function(command, cb) {
-      run(vm, command)
+    .action(function(command) {
+      return run(vm, command)
         .then(function(result) {
           return _bluebird2.default.resolve(formatResult(result))
         })
-        .then(function(output) {
-          return cb(undefined, output)
+        .tap(function(output) {
+          return _this.log(output)
         })
     })
 }
