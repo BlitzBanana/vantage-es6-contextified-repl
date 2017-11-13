@@ -1,4 +1,4 @@
-# vantage-es6-contextified-repl
+# Vantage REPL - ES6 & Context
 
 [![build status](https://img.shields.io/travis/blitzbanana/vantage-es6-contextified-repl.svg)](https://travis-ci.org/blitzbanana/vantage-es6-contextified-repl)
 [![code coverage](https://img.shields.io/codecov/c/github/blitzbanana/vantage-es6-contextified-repl.svg)](https://codecov.io/gh/blitzbanana/vantage-es6-contextified-repl)
@@ -6,8 +6,6 @@
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![made with lass](https://img.shields.io/badge/made_with-lass-95CC28.svg)](https://lass.js.org)
 [![license](https://img.shields.io/github/license/blitzbanana/vantage-es6-contextified-repl.svg)](LICENSE)
-
-> my exceptional project
 
 
 ## Table of Contents
@@ -36,12 +34,14 @@ yarn add vantage-es6-contextified-repl
 ## Usage
 
 ```js
-const VantageEs6ContextifiedRepl = require('vantage-es6-contextified-repl');
+import Vantage from 'vantage'
+import repl from 'vantage-es6-contextified-repl'
 
-const vantageEs6ContextifiedRepl = new VantageEs6ContextifiedRepl();
-
-console.log(vantageEs6ContextifiedRepl.renderName());
-// script
+const vantage = Vantage()
+  .delimiter('awesome-server$')
+  .use(repl, { app: app, db: db })
+  .listen(80)
+  .show()
 ```
 
 
