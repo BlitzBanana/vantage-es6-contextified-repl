@@ -15,7 +15,9 @@
   "dependencies": {},
   "ava": {
     "failFast": true,
-    "verbose": true
+    "verbose": true,
+    "babel": "inherit",
+    "require": ["babel-register"]
   },
   "devDependencies": {
     "auto-bind": "^1.1.0",
@@ -73,7 +75,7 @@
     "extends": "prettier",
     "plugins": ["prettier"],
     "parserOptions": {
-      "sourceType": "script"
+      "sourceType": "module"
     },
     "rules": {
       "prettier/prettier": [
@@ -81,7 +83,8 @@
         {
           "singleQuote": true,
           "bracketSpacing": true,
-          "trailingComma": "none"
+          "trailingComma": "none",
+          "semi": false
         }
       ],
       "max-len": [
@@ -95,6 +98,7 @@
       "camelcase": "off",
       "no-warning-comments": "off"
     },
-    "space": true
+    "space": true,
+    "semicolon": false
   }
 }
