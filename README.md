@@ -1,6 +1,6 @@
 # Vantage REPL - ES6 & Context
 
-[![build status](https://img.shields.io/travis/blitzbanana/vantage-es6-contextified-repl.svg)](https://travis-ci.org/blitzbanana/vantage-es6-contextified-repl)
+[![Build Status](https://travis-ci.org/BlitzBanana/vantage-es6-contextified-repl.svg?branch=master)](https://travis-ci.org/BlitzBanana/vantage-es6-contextified-repl)
 [![code coverage](https://img.shields.io/codecov/c/github/blitzbanana/vantage-es6-contextified-repl.svg)](https://codecov.io/gh/blitzbanana/vantage-es6-contextified-repl)
 [![code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
