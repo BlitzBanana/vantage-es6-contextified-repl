@@ -44,6 +44,16 @@ const vantage = Vantage()
   .show()
 ```
 
+```sh
+user$ node server.js
+awesome-server$ repl
+awesome-server$ repl: await db.users.find()
+[
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'Jane Doe' }
+]
+```
+
 
 ## Contributors
 
