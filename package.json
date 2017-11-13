@@ -1,7 +1,7 @@
 {
   "name": "vantage-es6-contextified-repl",
 
-  "description": "my exceptional project",
+  "description": "Contextified REPL module for Vantage with ES6 support",
   "version": "1.0.0",
   "author": "Victor Rebiard--Crépin <victor.rebiardcrepin@gmail.com> ()",
   "bugs": {
