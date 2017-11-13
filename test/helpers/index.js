@@ -1,10 +1,12 @@
-import Script from '../../src'
+import { VM } from 'vm2'
+import _ from 'lodash'
+import { compiler } from '../../src'
 
 export function beforeEach(t) {
-  const script = new Script({})
-  Object.assign(t.context, { script })
+  t.context.vm = new VM({
+    sandbox: { _ },
+    compiler
+  })
 }
 
-export function afterEach() {}
-
-export default { beforeEach, afterEach }
+export default { beforeEach }

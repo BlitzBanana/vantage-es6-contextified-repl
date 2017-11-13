@@ -11,19 +11,30 @@
   "contributors": [
     "Victor Rebiard--Crépin <victor.rebiardcrepin@gmail.com> ()"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "bluebird": "^3.5.1",
+    "cardinal": "^1.0.0",
+    "chalk": "^2.3.0",
+    "is-promise": "^2.1.0",
+    "jsome": "^2.3.26",
+    "json-stringify-safe": "^5.0.1",
+    "lodash": "^4.17.4",
+    "vm2": "^3.5.2"
+  },
   "ava": {
     "failFast": true,
     "verbose": true,
     "babel": "inherit",
-    "require": ["babel-register"]
+    "require": ["babel-register", "babel-polyfill"]
   },
   "devDependencies": {
     "auto-bind": "^1.1.0",
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.2",
-    "babel-preset-env": "^1.6.1",
+    "babel-polyfill": "^6.26.0",
     "codecov": "^2.3.0",
     "cross-env": "^5.0.5",
     "eslint": "^4.5.0",
@@ -35,6 +46,7 @@
     "prettier": "^1.6.1",
     "remark-cli": "^4.0.0",
     "remark-preset-github": "^0.0.6",
+    "vantage": "^1.7.0",
     "xo": "^0.19.0"
   },
   "engines": {

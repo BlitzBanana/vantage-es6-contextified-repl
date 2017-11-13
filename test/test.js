@@ -1,25 +1,32 @@
 import test from 'ava'
-import Script from '../src'
-import { beforeEach, afterEach } from './helpers'
+import Vantage from 'vantage'
+import chalk from 'chalk'
+import repl, { run } from '../src'
+import { beforeEach } from './helpers'
 
 test.beforeEach(beforeEach)
-test.afterEach(afterEach)
 
-test('returns itself', t => {
-  t.true(t.context.script instanceof Script)
+test('Sync code', async t => {
+  const result = await run(t.context.vm, 'true')
+  t.true(result)
 })
 
-test('sets a config object', t => {
-  const script = new Script(false)
-  t.true(script instanceof Script)
+test('Async code', async t => {
+  const result = await run(t.context.vm, 'Promise.resolve(42)')
+  t.is(result, 42)
 })
 
-test('renders name', t => {
-  const { script } = t.context
-  t.is(script.renderName(), 'script')
+test('Invalid code', async t => {
+  await t.throws(run(t.context.vm, 'yolo$$$$+=-'))
 })
 
-test('sets a default name', t => {
-  const { script } = t.context
-  t.is(script._name, 'script')
+test('vantage', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, { context: { awesome: 9000 } }).listen(8888)
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.is(result, chalk.white('9000'))
 })
