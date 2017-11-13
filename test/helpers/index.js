@@ -1,10 +1,10 @@
-const Script = require('../../src')
+import Script from '../../src'
 
-function beforeEach(t) {
+export function beforeEach(t) {
   const script = new Script({})
   Object.assign(t.context, { script })
 }
 
-function afterEach() {}
+export function afterEach() {}
 
-module.exports = { beforeEach, afterEach }
+export default { beforeEach, afterEach }

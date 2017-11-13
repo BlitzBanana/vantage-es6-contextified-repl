@@ -1,6 +1,6 @@
-const autoBind = require('auto-bind')
+import autoBind from 'auto-bind'
 
-class Script {
+export default class Script {
   constructor(config) {
     config = Object.assign({}, config)
     this._name = config.name || 'script'
@@ -11,5 +11,3 @@ class Script {
     return this._name
   }
 }
-
-module.exports = Script
