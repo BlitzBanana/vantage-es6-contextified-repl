@@ -20,13 +20,74 @@ test('Invalid code', async t => {
   await t.throws(run(t.context.vm, 'yolo$$$$+=-'))
 })
 
-test('vantage', async t => {
+test('vantage without context', async t => {
   const vantage = new Vantage()
-  vantage.use(repl, { context: { awesome: 9000 } }).listen(8888)
+  vantage.use(repl)
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('_.random()')
+  })
+
+  t.truthy(result)
+})
+
+test('vantage string', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, { context: { awesome: '9000' } })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
   })
 
   t.is(result, chalk.white('9000'))
+})
+
+test('vantage number', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, { context: { awesome: 9000 } })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.is(result, chalk.white('9000'))
+})
+
+test('vantage array', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, { context: { awesome: [{ a: 9000 }] } })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.truthy(result)
+})
+
+test('vantage object', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, { context: { awesome: { a: 9000 } } })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.truthy(result)
+})
+
+test('vantage function', async t => {
+  const vantage = new Vantage()
+  vantage.use(repl, {
+    context: {
+      awesome(a, b) {
+        return a * b
+      }
+    }
+  })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.truthy(result)
 })

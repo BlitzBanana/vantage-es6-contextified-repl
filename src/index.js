@@ -4,7 +4,8 @@ import { transform } from 'babel-core'
 import isPromise from 'is-promise'
 import chalk from 'chalk'
 import jsome from 'jsome'
-import cardinal from 'cardinal'
+import { highlight } from 'cardinal'
+import { js_beautify } from 'js-beautify'
 import _ from 'lodash'
 
 const wrapCode = code => `;(() => {return ${code}})()`
@@ -15,20 +16,21 @@ export const compiler = content =>
     presets: ['env']
   }).code
 
+const beautifyJs = input => js_beautify(input, { indent_size: 2 })
 const formatString = input => chalk.white(input)
 const formatObject = input => jsome(input)
 const formatArray = input => formatObject(input)
-const formatFunction = input => cardinal.highlight(input.toString())
+const formatFunction = input => highlight(beautifyJs(input.toString()))
 
 export const formatResult = result => {
   if (_.isString(result)) {
     return formatString(result)
-  } else if (_.isObject(result)) {
-    return formatObject(result)
-  } else if (_.isArray(result)) {
-    return formatArray(result)
   } else if (_.isFunction(result)) {
     return formatFunction(result)
+  } else if (_.isArray(result)) {
+    return formatArray(result)
+  } else if (_.isObject(result)) {
+    return formatObject(result)
   }
   return formatString(result.toString())
 }
