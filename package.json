@@ -62,7 +62,8 @@
     "url": "https://github.com/blitzbanana/vantage-es6-contextified-repl"
   },
   "scripts": {
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "coverage":
+      "nyc report --reporter=text-lcov > coverage.lcov && codecov -t 477fa686-512b-4422-95b4-d754f2da0e15",
     "lint": "xo && remark . -qfo",
     "precommit": "lint-staged && npm test",
     "test": "npm run lint && npm run test-coverage",
