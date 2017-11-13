@@ -52,7 +52,7 @@ awesome-server$ repl: await db.users.find()
   { id: 1, name: 'John Doe' },
   { id: 2, name: 'Jane Doe' }
 ]
-awesome-server$ repl: Promise.all([db.users.findOne(2), db.users.findOne(1)])
+awesome-server$ repl: await Promise.all([db.users.findOne(2), db.users.findOne(1)])
 [
   { id: 2, name: 'Jane Doe' },
   { id: 1, name: 'John Doe' }
