@@ -45,7 +45,7 @@ const vantage = Vantage()
 ```
 
 ```sh
-user$ node server.js
+user$ vantage my.server.com:8080
 awesome-server$ repl
 awesome-server$ repl: await db.users.find()
 [
