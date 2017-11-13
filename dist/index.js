@@ -105,7 +105,7 @@ var formatResult = (exports.formatResult = function formatResult(result) {
   } else if (_lodash2.default.isObject(result)) {
     return formatObject(result)
   }
-  return formatString(result.toString ? result.toString() : result)
+  return formatString(result)
 })
 
 var run = (exports.run = function run(vm, command) {
