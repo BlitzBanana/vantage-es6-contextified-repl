@@ -39,20 +39,20 @@ import repl from 'vantage-es6-contextified-repl'
 
 const vantage = Vantage()
   .delimiter('awesome-server$')
-  .use(repl, { app: app, db: db })
+  .use(repl, { mode: 'awesome-repl', delimiter: 'repl$$', context: { app: app, db: db }})
   .listen(80)
   .show()
 ```
 
 ```sh
 user$ vantage my.server.com:8080
-awesome-server$ repl
-awesome-server$ repl: await db.users.find()
+awesome-server$ awesome-repl
+awesome-server$ repl$$ await db.users.find()
 [
   { id: 1, name: 'John Doe' },
   { id: 2, name: 'Jane Doe' }
 ]
-awesome-server$ repl: await Promise.all([db.users.findOne(2), db.users.findOne(1)])
+awesome-server$ repl$$ await Promise.all([db.users.findOne(2), db.users.findOne(1)])
 [
   { id: 2, name: 'Jane Doe' },
   { id: 1, name: 'John Doe' }

@@ -50,12 +50,14 @@ export const run = (vm, command) =>
   })
 
 export default function(vantage, options = {}) {
+  const mode = options.mode || 'repl'
+  const delimiter = options.mode || 'repl:'
   const sandbox = Object.assign({}, { _, Promise }, options.context)
   const vm = new VM({ sandbox, compiler })
 
   vantage
-    .mode('repl', 'Enters REPL mode.')
-    .delimiter('repl:')
+    .mode(mode, 'Enters REPL mode.')
+    .delimiter(delimiter)
     .init(function(args, cb) {
       this.log("Entering REPL Mode. To exit, type 'exit'")
       cb(undefined, "Entering REPL Mode. To exit, type 'exit'.")
