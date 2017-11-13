@@ -1,6 +1,5 @@
 {
   "name": "vantage-es6-contextified-repl",
-
   "description": "Contextified REPL module for Vantage with ES6 support",
   "version": "1.0.0",
   "author": "Victor Rebiard--Crépin <victor.rebiardcrepin@gmail.com> ()",
@@ -22,6 +21,9 @@
   "devDependencies": {
     "auto-bind": "^1.1.0",
     "ava": "^0.22.0",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-preset-env": "^1.6.1",
     "codecov": "^2.3.0",
     "cross-env": "^5.0.5",
     "eslint": "^4.5.0",
@@ -43,12 +45,12 @@
   "license": "MIT",
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx,css,less,scss,json,graphql}": [
-      "prettier --write --single-quote --trailing-comma none",
+      "prettier --write --single-quote --trailing-comma none --no-semi",
       "git add"
     ],
     "*.md": ["remark . -qfo", "git add"]
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "nyc": {
     "check-coverage": true,
     "lines": 100,
@@ -69,11 +71,13 @@
     "lint": "xo && remark . -qfo",
     "precommit": "lint-staged && npm test",
     "test": "npm run lint && npm run test-coverage",
-    "test-coverage": "cross-env NODE_ENV=test nyc ava"
+    "test-coverage": "cross-env NODE_ENV=test nyc ava",
+    "build": "babel src -d dist"
   },
   "xo": {
     "extends": "prettier",
     "plugins": ["prettier"],
+    "parser": "babel-eslint",
     "parserOptions": {
       "sourceType": "module"
     },
