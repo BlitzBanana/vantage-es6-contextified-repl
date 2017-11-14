@@ -1,7 +1,7 @@
 {
   "name": "vantage-es6-contextified-repl",
   "description": "Contextified REPL module for Vantage with ES6 support",
-  "version": "1.6.1",
+  "version": "0.0.1",
   "author": "Victor Rebiard--Crépin <victor.rebiardcrepin@gmail.com> ()",
   "bugs": {
     "url":
@@ -53,7 +53,16 @@
     "node": ">=8.3"
   },
   "homepage": "https://github.com/blitzbanana/vantage-es6-contextified-repl",
-  "keywords": ["vantage", "repl", "es6", "context", "lass"],
+  "keywords": [
+    "vantage",
+    "vorpal",
+    "repl",
+    "vantage-repl",
+    "es6",
+    "babel",
+    "context",
+    "lass"
+  ],
   "license": "MIT",
   "lint-staged": {
     "*.{js,jsx,mjs,ts,tsx,css,less,scss,json,graphql}": [

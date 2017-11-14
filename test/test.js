@@ -21,19 +21,17 @@ test('Invalid code', async t => {
 })
 
 test('vantage without context', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl)
+  const vantage = new Vantage().use(repl)
 
   const result = await vantage.exec('repl').then(() => {
-    return vantage.exec('_.random()')
+    return vantage.exec('_.random(54, 54, false)')
   })
 
-  t.truthy(result)
+  t.is(result, chalk.white('54'))
 })
 
 test('vantage string', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, { context: { awesome: '9000' } })
+  const vantage = new Vantage().use(repl, { context: { awesome: '9000' } })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
@@ -43,8 +41,7 @@ test('vantage string', async t => {
 })
 
 test('vantage undefined', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, { context: { awesome: undefined } })
+  const vantage = new Vantage().use(repl, { context: { awesome: undefined } })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
@@ -54,8 +51,10 @@ test('vantage undefined', async t => {
 })
 
 test('vantage another mode', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, { mode: 'awesome-repl', context: { awesome: '9000' } })
+  const vantage = new Vantage().use(repl, {
+    mode: 'awesome-repl',
+    context: { awesome: '9000' }
+  })
 
   const result = await vantage.exec('awesome-repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
@@ -65,8 +64,7 @@ test('vantage another mode', async t => {
 })
 
 test('vantage number', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, { context: { awesome: 9000 } })
+  const vantage = new Vantage().use(repl, { context: { awesome: 9000 } })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
@@ -76,8 +74,9 @@ test('vantage number', async t => {
 })
 
 test('vantage array', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, { context: { awesome: [{ a: 9000 }] } })
+  const vantage = new Vantage().use(repl, {
+    context: { awesome: [{ a: 9000 }] }
+  })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
@@ -87,8 +86,7 @@ test('vantage array', async t => {
 })
 
 test('vantage object', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, { context: { awesome: { a: 9000 } } })
+  const vantage = new Vantage().use(repl, { context: { awesome: { a: 9000 } } })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
@@ -98,8 +96,7 @@ test('vantage object', async t => {
 })
 
 test('vantage function', async t => {
-  const vantage = new Vantage()
-  vantage.use(repl, {
+  const vantage = new Vantage().use(repl, {
     context: {
       awesome(a, b) {
         return a * b
@@ -113,3 +110,18 @@ test('vantage function', async t => {
 
   t.truthy(result)
 })
+
+// test('define variable', async t => {
+//   const vantage = new Vantage().use(repl)
+
+//   const result = await vantage
+//     .exec('repl')
+//     .then(() => {
+//       return vantage.exec('a = 100')
+//     })
+//     .then(() => {
+//       return vantage.exec('a')
+//     })
+
+//   t.is(result, chalk.white('100'))
+// })
