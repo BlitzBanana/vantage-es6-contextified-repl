@@ -1,49 +1,30 @@
+import vm from 'vm'
 import Promise from 'bluebird'
-import { VM } from 'vm2'
-import { transform } from 'babel-core'
-import isPromise from 'is-promise'
-import chalk from 'chalk'
-import jsome from 'jsome'
-import { highlight } from 'cardinal'
-import { js_beautify } from 'js-beautify'
 import _ from 'lodash'
+import babel from './compilers/babel'
+import format from './format'
 
-const wrapCode = code => `;(() => {return ${code}})()`
-
-export const compiler = content =>
-  transform(wrapCode(content), {
-    babelrc: false,
-    presets: ['env']
-  }).code
-
-const beautifyJs = input => js_beautify(input, { indent_size: 2 })
-const formatString = input => chalk.white(input)
-const formatObject = input => jsome(input)
-const formatArray = input => formatObject(input)
-const formatFunction = input => highlight(beautifyJs(input.toString()))
-
-export const formatResult = result => {
-  if (_.isString(result)) {
-    return formatString(result)
-  } else if (_.isFunction(result)) {
-    return formatFunction(result)
-  } else if (_.isArray(result)) {
-    return formatArray(result)
-  } else if (_.isObject(result)) {
-    return formatObject(result)
+const consoleProxy = vantage => ({
+  log() {
+    vantage.log(...arguments)
   }
-  return formatString(result)
-}
+})
 
-export const run = (vm, command) =>
+const run = (js, context, compiler, timeout) =>
   new Promise((resolve, reject) => {
     try {
-      const result = vm.run(command)
-      if (isPromise(result)) {
-        result.then(resolve).catch(reject)
-      } else {
-        resolve(result)
-      }
+      const transformed = compiler(js)
+      const script = vm.createScript(transformed, {
+        filename: 'vantage-repl',
+        displayErrors: true
+      })
+
+      const result = script.runInContext(context, {
+        displayErrors: true,
+        timeout
+      })
+
+      resolve(result)
     } catch (err) {
       reject(err)
     }
@@ -51,21 +32,26 @@ export const run = (vm, command) =>
 
 export default function(vantage, options = {}) {
   const mode = options.mode || 'repl'
+  const description = options.description || 'Enters REPL mode.'
+  const banner = options.banner || "Entering REPL Mode. To exit, type 'exit'"
   const delimiter = options.delimiter || 'repl:'
-  const sandbox = Object.assign({}, { _, Promise }, options.context || {})
-  let vm
+  const timeout = options.timeout || 15000
+  const compiler = options.compiler || babel
+  const baseContext = { _, Promise, console: consoleProxy(vantage) }
+  const extContext = options.context || {}
+  const sandbox = Object.assign({}, baseContext, extContext)
+  const context = vm.createContext(sandbox)
 
   vantage
-    .mode(mode, 'Enters REPL mode.')
+    .mode(mode, description)
     .delimiter(delimiter)
     .init(function(args, cb) {
-      this.log("Entering REPL Mode. To exit, type 'exit'")
-      vm = new VM({ sandbox, compiler })
+      this.log(banner)
       cb()
     })
     .action(function(command) {
-      return run(vm, command)
-        .then(result => Promise.resolve(formatResult(result)))
-        .tap(output => this.log(output))
+      return run(command, context, compiler, timeout)
+        .timeout(timeout)
+        .tap(output => this.log(format(output)))
     })
 }

@@ -15,13 +15,9 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "bluebird": "^3.5.1",
-    "cardinal": "^1.0.0",
     "chalk": "^2.3.0",
-    "is-promise": "^2.1.0",
-    "js-beautify": "^1.7.4",
-    "jsome": "^2.3.26",
     "lodash": "^4.17.4",
-    "vm2": "^3.5.2"
+    "trim": "^0.0.1"
   },
   "ava": {
     "failFast": true,
@@ -30,7 +26,6 @@
     "require": ["babel-register", "babel-polyfill"]
   },
   "devDependencies": {
-    "auto-bind": "^1.1.0",
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.2",
@@ -40,12 +35,14 @@
     "eslint": "^4.5.0",
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-prettier": "^2.2.0",
+    "figlet": "^1.2.0",
     "husky": "^0.14.3",
     "lint-staged": "^4.0.4",
     "nyc": "^11.1.0",
     "prettier": "^1.6.1",
     "remark-cli": "^4.0.0",
     "remark-preset-github": "^0.0.6",
+    "strip-ansi": "^4.0.0",
     "vantage": "^1.7.0",
     "xo": "^0.19.0"
   },
@@ -93,7 +90,8 @@
     "precommit": "lint-staged && npm test",
     "test": "npm run lint && npm run test-coverage",
     "test-coverage": "cross-env NODE_ENV=test nyc ava",
-    "build": "babel src -d dist"
+    "build": "babel src -d dist --source-maps",
+    "build:watch": "babel src -d dist --source-maps --watch"
   },
   "xo": {
     "extends": "prettier",

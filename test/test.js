@@ -1,53 +1,29 @@
 import test from 'ava'
 import Vantage from 'vantage'
-import chalk from 'chalk'
-import repl, { run } from '../src'
-import { beforeEach } from './helpers'
-
-test.beforeEach(beforeEach)
-
-test('Sync code', async t => {
-  const result = await run(t.context.vm, 'true')
-  t.true(result)
-})
-
-test('Async code', async t => {
-  const result = await run(t.context.vm, 'Promise.resolve(42)')
-  t.is(result, 42)
-})
-
-test('Invalid code', async t => {
-  await t.throws(run(t.context.vm, 'yolo$$$$+=-'))
-})
-
-test('vantage without context', async t => {
-  const vantage = new Vantage().use(repl)
-
-  const result = await vantage.exec('repl').then(() => {
-    return vantage.exec('_.random(54, 54, false)')
-  })
-
-  t.is(result, chalk.white('54'))
-})
-
-test('vantage string', async t => {
-  const vantage = new Vantage().use(repl, { context: { awesome: '9000' } })
-
-  const result = await vantage.exec('repl').then(() => {
-    return vantage.exec('Promise.resolve(awesome)')
-  })
-
-  t.is(result, chalk.white('9000'))
-})
+import stripAnsi from 'strip-ansi'
+import repl from '../src'
 
 test('vantage undefined', async t => {
   const vantage = new Vantage().use(repl, { context: { awesome: undefined } })
 
   const result = await vantage.exec('repl').then(() => {
-    return vantage.exec('Promise.resolve(awesome)')
+    return vantage.exec('awesome')
   })
 
-  t.is(result, chalk.white('undefined'))
+  t.is(stripAnsi(result), undefined)
+})
+
+test('vantage not defined', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const error = await t.throws(
+    vantage.exec('repl').then(() => {
+      return vantage.exec('foobar')
+    })
+  )
+
+  t.is(error.constructor.name, ReferenceError.name)
+  t.is(error.message, 'foobar is not defined')
 })
 
 test('vantage another mode', async t => {
@@ -60,7 +36,27 @@ test('vantage another mode', async t => {
     return vantage.exec('Promise.resolve(awesome)')
   })
 
-  t.is(result, chalk.white('9000'))
+  t.is(stripAnsi(result), '9000')
+})
+
+test('vantage without context', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('_.random(54, 54, false)')
+  })
+
+  t.is(stripAnsi(result), 54)
+})
+
+test('vantage string', async t => {
+  const vantage = new Vantage().use(repl, { context: { awesome: '9000' } })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome)')
+  })
+
+  t.is(stripAnsi(result), '9000')
 })
 
 test('vantage number', async t => {
@@ -70,7 +66,7 @@ test('vantage number', async t => {
     return vantage.exec('Promise.resolve(awesome)')
   })
 
-  t.is(result, chalk.white('9000'))
+  t.is(stripAnsi(result), 9000)
 })
 
 test('vantage array', async t => {
@@ -111,17 +107,27 @@ test('vantage function', async t => {
   t.truthy(result)
 })
 
-// test('define variable', async t => {
-//   const vantage = new Vantage().use(repl)
+test('define variable', async t => {
+  const vantage = new Vantage().use(repl)
 
-//   const result = await vantage
-//     .exec('repl')
-//     .then(() => {
-//       return vantage.exec('a = 100')
-//     })
-//     .then(() => {
-//       return vantage.exec('a')
-//     })
+  const result = await vantage
+    .exec('repl')
+    .then(() => {
+      return vantage.exec('let a = 100')
+    })
+    .then(() => {
+      return vantage.exec('a')
+    })
 
-//   t.is(result, chalk.white('100'))
-// })
+  t.is(stripAnsi(result), 100)
+})
+
+test('console.log', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec("console.log('test', 100)")
+  })
+
+  t.is(result, undefined)
+})

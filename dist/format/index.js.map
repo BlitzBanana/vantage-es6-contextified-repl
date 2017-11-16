@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/format/index.js"],"names":["input","toString","white"],"mappings":";;;;;;AAAA;;;;;;kBAEe;AAAA,SACbA,SAASA,MAAMC,QAAf,GAA0B,gBAAMC,KAAN,CAAYF,MAAMC,QAAN,EAAZ,CAA1B,GAA0DD,KAD7C;AAAA,C","file":"index.js","sourcesContent":["import chalk from 'chalk'\n\nexport default input =>\n  input && input.toString ? chalk.white(input.toString()) : input\n"]}

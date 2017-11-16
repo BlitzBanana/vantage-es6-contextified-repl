@@ -1,6 +1,6 @@
 # Vantage REPL - ES6 & Context
 
-> WIP not functionnal yet, I have some troubles with results ouput and assessments
+> WIP not functionnal yet, I have some troubles to return non-primitive result
 
 [![NPM](https://nodei.co/npm/vantage-es6-contextified-repl.png)](https://nodei.co/npm/vantage-es6-contextified-repl/)
 
