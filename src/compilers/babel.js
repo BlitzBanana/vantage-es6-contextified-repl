@@ -4,5 +4,6 @@ import trim from 'trim'
 export default code =>
   transform(trim(code), {
     babelrc: false,
-    presets: ['env']
+    presets: ['env'],
+    plugins: ['transform-object-rest-spread']
   }).code

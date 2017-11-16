@@ -13,7 +13,8 @@ exports.default = function(vantage) {
   var banner = options.banner || "Entering REPL Mode. To exit, type 'exit'"
   var delimiter = options.delimiter || 'repl:'
   var timeout = options.timeout || 15000
-  var compiler = options.compiler || _babel2.default
+  var compiler =
+    options.compiler === undefined ? _babel2.default : options.compiler
   var baseContext = {
     _: _lodash2.default,
     Promise: _bluebird2.default,
@@ -76,7 +77,7 @@ var consoleProxy = function consoleProxy(vantage) {
 var run = function run(js, context, compiler, timeout) {
   return new _bluebird2.default(function(resolve, reject) {
     try {
-      var transformed = compiler(js)
+      var transformed = typeof compiler === 'function' ? compiler(js) : js
       var script = _vm2.default.createScript(transformed, {
         filename: 'vantage-repl',
         displayErrors: true

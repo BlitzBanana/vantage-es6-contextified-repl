@@ -1,6 +1,6 @@
 # Vantage REPL - ES6 & Context
 
-> WIP not functionnal yet, I have some troubles to return non-primitive result
+> WIP outputs are not formatted yet
 
 [![NPM](https://nodei.co/npm/vantage-es6-contextified-repl.png)](https://nodei.co/npm/vantage-es6-contextified-repl/)
 
@@ -16,6 +16,7 @@
 
 * [Install](#install)
 * [Usage](#usage)
+  * [Options](#options)
 * [Contributors](#contributors)
 * [License](#license)
 
@@ -43,7 +44,13 @@ import repl from 'vantage-es6-contextified-repl'
 
 const vantage = Vantage()
   .delimiter('awesome-server$')
-  .use(repl, { mode: 'awesome-repl', delimiter: 'repl$$', context: { app: app, db: db }})
+  .use(repl, {
+    description: 'REL with custom context',
+    banner: 'Welcome to my contextified REPL mode !',
+    delimiter: chalk.red('repl:'),
+    context: { app, db },
+    timeout: 10000
+  })
   .listen(80)
   .show()
 ```
@@ -51,17 +58,30 @@ const vantage = Vantage()
 ```sh
 user$ vantage my.server.com:8080
 awesome-server$ awesome-repl
-awesome-server$ repl$$ await db.users.find()
+Welcome to my contextified REPL mode !
+awesome-server$ repl: db.users.find()
 [
   { id: 1, name: 'John Doe' },
   { id: 2, name: 'Jane Doe' }
 ]
-awesome-server$ repl$$ await Promise.all([db.users.findOne(2), db.users.findOne(1)])
+awesome-server$ repl: Promise.all([db.users.findOne(2), db.users.findOne(1)])
 [
   { id: 2, name: 'Jane Doe' },
   { id: 1, name: 'John Doe' }
 ]
+awesome-server$ repl: Promise.resolve(10).delay(11000)
+Error: TimeoutError: operation timed out
 ```
+
+### Options
+
+* `mode` - the command to type to enter in REPL mode, default to `repl`.
+* `description` - the mode description displayed in help menu, default to `Enters REPL mode.`.
+* `banner` - the welcome message displayed when entrering in REPL mode, default to: `Entering REPL Mode. To exit, type 'exit'`.
+* `delimiter` - the additional delimiter of the mode, default to `repl:`.
+* `timeout` - the maximum amout of time to eval the code, default to `15000`.
+* `context` - the REPL context, accessible from evalued code, default to `{}`.
+* `compiler` - the code transformation functon, set `null` or a functon using signature `function(code:string)` and that returns a `string`, the default function uses Babel.
 
 
 ## Contributors

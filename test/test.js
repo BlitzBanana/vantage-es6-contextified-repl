@@ -3,6 +3,27 @@ import Vantage from 'vantage'
 import stripAnsi from 'strip-ansi'
 import repl from '../src'
 
+// TODO: find a ES+ that is not supported in Nodejs to test that
+test('vantage custom compiler', async t => {
+  const vantage = new Vantage().use(repl, { compiler: code => code })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('1+1')
+  })
+
+  t.is(stripAnsi(result), 2)
+})
+
+test('vantage no compiler', async t => {
+  const vantage = new Vantage().use(repl, { compiler: null })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('1+1')
+  })
+
+  t.is(stripAnsi(result), 2)
+})
+
 test('vantage undefined', async t => {
   const vantage = new Vantage().use(repl, { context: { awesome: undefined } })
 
@@ -120,6 +141,21 @@ test('define variable', async t => {
     })
 
   t.is(stripAnsi(result), 100)
+})
+
+test('define variable with desctructuring', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage
+    .exec('repl')
+    .then(() => {
+      return vantage.exec('const {a, ...data} = {a:1, b:2, c:3}')
+    })
+    .then(() => {
+      return vantage.exec('a')
+    })
+
+  t.is(stripAnsi(result), 1)
 })
 
 test('console.log', async t => {

@@ -17,7 +17,8 @@ function _interopRequireDefault(obj) {
 exports.default = function(code) {
   return (0, _babelCore.transform)((0, _trim2.default)(code), {
     babelrc: false,
-    presets: ['env']
+    presets: ['env'],
+    plugins: ['transform-object-rest-spread']
   }).code
 }
 //# sourceMappingURL=babel.js.map
