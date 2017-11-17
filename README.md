@@ -39,37 +39,24 @@ yarn add vantage-es6-contextified-repl
 ```js
 import Vantage from 'vantage'
 import repl from 'vantage-es6-contextified-repl'
+import chalk from 'chalk'
+import figlet from 'figlet'
 
-const vantage = Vantage()
-  .delimiter('awesome-server$')
+new Vantage()
   .use(repl, {
-    description: 'REL with custom context',
-    banner: 'Welcome to my contextified REPL mode !',
     delimiter: chalk.red('repl:'),
-    context: { app, db },
-    timeout: 10000
+    description: 'Server REPL with access to app and db objects !',
+    banner: 'Have fun !',
+    context: { infos, app, db },
+    formatter: 'highlight'
   })
-  .listen(80)
+  .banner(figlet.textSync('MAIN SERVER'))
+  .delimiter(chalk.green('main-server~$'))
+  .listen(8080)
   .show()
 ```
 
-```sh
-user$ vantage my.server.com:8080
-awesome-server$ awesome-repl
-Welcome to my contextified REPL mode !
-awesome-server$ repl: db.users.find()
-[
-  { id: 1, name: 'John Doe' },
-  { id: 2, name: 'Jane Doe' }
-]
-awesome-server$ repl: Promise.all([db.users.findOne(2), db.users.findOne(1)])
-[
-  { id: 2, name: 'Jane Doe' },
-  { id: 1, name: 'John Doe' }
-]
-awesome-server$ repl: Promise.resolve(10).delay(11000)
-Error: TimeoutError: operation timed out
-```
+<img src="screenshot.png" max-width="980">
 
 ### Options
 
