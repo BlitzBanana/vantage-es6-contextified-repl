@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "author": "Victor Rebiard--Crépin <victor.rebiardcrepin@gmail.com> ()",
   "bugs": {
-    "url":
-      "https://github.com/blitzbanana/vantage-es6-contextified-repl/issues",
+    "url": "https://github.com/blitzbanana/vantage-es6-contextified-repl/issues",
     "email": "victor.rebiardcrepin@gmail.com"
   },
   "contributors": [
@@ -26,7 +25,10 @@
     "failFast": false,
     "verbose": true,
     "babel": "inherit",
-    "require": ["babel-register", "babel-polyfill"]
+    "require": [
+      "babel-register",
+      "babel-polyfill"
+    ]
   },
   "devDependencies": {
     "ava": "^0.22.0",
@@ -72,7 +74,10 @@
       "prettier --write --single-quote --trailing-comma none --no-semi",
       "git add"
     ],
-    "*.md": ["remark . -qfo", "git add"]
+    "*.md": [
+      "remark . -qfo",
+      "git add"
+    ]
   },
   "main": "dist/index.js",
   "nyc": {
@@ -80,18 +85,23 @@
     "lines": 100,
     "functions": 100,
     "branches": 100,
-    "reporter": ["lcov", "html", "text"]
+    "reporter": [
+      "lcov",
+      "html",
+      "text"
+    ]
   },
   "remarkConfig": {
-    "plugins": ["preset-github"]
+    "plugins": [
+      "preset-github"
+    ]
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/blitzbanana/vantage-es6-contextified-repl"
   },
   "scripts": {
-    "coverage":
-      "nyc report --reporter=text-lcov > coverage.lcov && codecov -t 477fa686-512b-4422-95b4-d754f2da0e15",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov -t 477fa686-512b-4422-95b4-d754f2da0e15",
     "lint": "xo && remark . -qfo",
     "precommit": "lint-staged && npm test",
     "test": "npm run lint && npm run test-coverage",
@@ -101,7 +111,9 @@
   },
   "xo": {
     "extends": "prettier",
-    "plugins": ["prettier"],
+    "plugins": [
+      "prettier"
+    ],
     "parser": "babel-eslint",
     "parserOptions": {
       "sourceType": "module"
