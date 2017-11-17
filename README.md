@@ -56,7 +56,7 @@ new Vantage()
   .show()
 ```
 
-<img src="screenshot.png" max-width="980">
+<img src="screenshot.gif" max-width="980">
 
 ### Options
 
