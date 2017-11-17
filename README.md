@@ -80,6 +80,9 @@ Error: TimeoutError: operation timed out
 * `timeout` - the maximum amout of time to eval the code, default to `15000`.
 * `context` - the REPL context, accessible from evalued code, default to `{}`.
 * `compiler` - the code transformation functon, set `null` or a functon using signature `function(code:string)` and that returns a `string`, the default function uses Babel.
+* `formatter` - the output transformation functon, set `highlight`, `none` or a functon using signature `function(input:string)` and that returns a `string`, default to `highlight`.
+
+> TODO: Make an option to use a custom or predefined theme for `highlight` formatter
 
 
 ## Contributors
