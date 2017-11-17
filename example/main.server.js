@@ -1,7 +1,7 @@
 const Vantage = require('vantage')
 const figlet = require('figlet')
 const chalk = require('chalk')
-const repl = require('../dist').default
+const repl = require('../dist')
 
 const infos = {
   name: 'main-server',
@@ -13,8 +13,9 @@ const foobar = input => JSON.stringify(input)
 new Vantage()
   .use(repl, {
     delimiter: chalk.red('repl:'),
+    description: 'Custom REPL mode !',
     context: { infos, foobar },
-    compiler: null
+    formatter: 'highlight'
   })
   .banner(figlet.textSync('MAIN SERVER'))
   .delimiter(chalk.green('main-server~$'))

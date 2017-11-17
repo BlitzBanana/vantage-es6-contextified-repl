@@ -1,7 +1,7 @@
 const Vantage = require('vantage')
 const figlet = require('figlet')
 const chalk = require('chalk')
-const repl = require('../dist').default
+const repl = require('../dist')
 
 const infos = {
   name: 'db-server',

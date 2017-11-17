@@ -1,7 +1,5 @@
 # Vantage REPL - ES6 & Context
 
-> WIP outputs are not formatted yet
-
 [![NPM](https://nodei.co/npm/vantage-es6-contextified-repl.png)](https://nodei.co/npm/vantage-es6-contextified-repl/)
 
 [![Build Status](https://travis-ci.org/BlitzBanana/vantage-es6-contextified-repl.svg?branch=master)](https://travis-ci.org/BlitzBanana/vantage-es6-contextified-repl)

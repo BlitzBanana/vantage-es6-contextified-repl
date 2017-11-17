@@ -17,11 +17,13 @@
     "babel-preset-env": "^1.6.1",
     "bluebird": "^3.5.1",
     "chalk": "^2.3.0",
+    "emphasize": "^1.5.0",
+    "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.4",
     "trim": "^0.0.1"
   },
   "ava": {
-    "failFast": true,
+    "failFast": false,
     "verbose": true,
     "babel": "inherit",
     "require": ["babel-register", "babel-polyfill"]
@@ -30,6 +32,7 @@
     "ava": "^0.22.0",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^8.0.2",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-polyfill": "^6.26.0",
     "codecov": "^2.3.0",
     "cross-env": "^5.0.5",
@@ -43,6 +46,8 @@
     "prettier": "^1.6.1",
     "remark-cli": "^4.0.0",
     "remark-preset-github": "^0.0.6",
+    "rollup": "^0.51.6",
+    "rollup-plugin-babel": "^3.0.2",
     "strip-ansi": "^4.0.0",
     "vantage": "^1.7.0",
     "xo": "^0.19.0"
@@ -90,9 +95,9 @@
     "lint": "xo && remark . -qfo",
     "precommit": "lint-staged && npm test",
     "test": "npm run lint && npm run test-coverage",
-    "test-coverage": "cross-env NODE_ENV=test nyc ava",
-    "build": "babel src -d dist --source-maps",
-    "build:watch": "babel src -d dist --source-maps --watch"
+    "test-coverage": "cross-env NODE_ENV=test BABEL_ENV=test nyc ava",
+    "build": "cross-env ENV=build rollup --config",
+    "build:watch": "cross-env BABEL_ENV=build rollup --config --watch"
   },
   "xo": {
     "extends": "prettier",

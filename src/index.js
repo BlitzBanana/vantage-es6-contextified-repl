@@ -2,13 +2,22 @@ import vm from 'vm'
 import Promise from 'bluebird'
 import _ from 'lodash'
 import babel from './compilers/babel'
-import format from './format'
+import formatters from './formatters/index'
 
-const consoleProxy = vantage => ({
+const consoleProxy = commandInstance => ({
   log() {
-    vantage.log(...arguments)
+    commandInstance.log(...arguments)
   }
 })
+
+const formatter = name => {
+  if (typeof name === 'function') return name
+  const formatter = formatters[name]
+  return formatter ? formatter : formatters.highlight
+}
+
+const getContext = (commandInstance, context) =>
+  Object.assign(context, { console: consoleProxy(commandInstance) })
 
 const run = (js, context, compiler, timeout) =>
   new Promise((resolve, reject) => {
@@ -37,10 +46,11 @@ export default function(vantage, options = {}) {
   const delimiter = options.delimiter || 'repl:'
   const timeout = options.timeout || 15000
   const compiler = options.compiler === undefined ? babel : options.compiler
-  const baseContext = { _, Promise, console: consoleProxy(vantage) }
+  const baseContext = { _, Promise }
   const extContext = options.context || {}
   const sandbox = Object.assign({}, baseContext, extContext)
   const context = vm.createContext(sandbox)
+  const format = formatter(options.formatter || 'highlight')
 
   vantage
     .mode(mode, description)
@@ -50,7 +60,8 @@ export default function(vantage, options = {}) {
       cb()
     })
     .action(function(command) {
-      return run(command, context, compiler, timeout)
+      const tmpContext = getContext(this, context)
+      return run(command, tmpContext, compiler, timeout)
         .timeout(timeout)
         .tap(output => this.log(format(output)))
     })

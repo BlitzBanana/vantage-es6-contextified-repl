@@ -3,8 +3,10 @@ import Vantage from 'vantage'
 import stripAnsi from 'strip-ansi'
 import repl from '../src'
 
+// TODO: find a way to test formatter output from vantage instance
+
 // TODO: find a ES+ that is not supported in Nodejs to test that
-test('vantage custom compiler', async t => {
+test('Using a custom compiler', async t => {
   const vantage = new Vantage().use(repl, { compiler: code => code })
 
   const result = await vantage.exec('repl').then(() => {
@@ -14,7 +16,7 @@ test('vantage custom compiler', async t => {
   t.is(stripAnsi(result), 2)
 })
 
-test('vantage no compiler', async t => {
+test('Using no compiler', async t => {
   const vantage = new Vantage().use(repl, { compiler: null })
 
   const result = await vantage.exec('repl').then(() => {
@@ -24,7 +26,37 @@ test('vantage no compiler', async t => {
   t.is(stripAnsi(result), 2)
 })
 
-test('vantage undefined', async t => {
+test('Using a custom output formatter', async t => {
+  const vantage = new Vantage().use(repl, { formatter: val => val + 'test' })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('10')
+  })
+
+  t.is(stripAnsi(result), 10)
+})
+
+test('Using a predefined ouput formatter', async t => {
+  const vantage = new Vantage().use(repl, { formatter: 'highlight' })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('10')
+  })
+
+  t.is(stripAnsi(result), 10)
+})
+
+test('Using an unkown predefined output fomatter', async t => {
+  const vantage = new Vantage().use(repl, { formatter: 'invalid formatter' })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('10')
+  })
+
+  t.is(stripAnsi(result), 10)
+})
+
+test('Call a variable set to undefined', async t => {
   const vantage = new Vantage().use(repl, { context: { awesome: undefined } })
 
   const result = await vantage.exec('repl').then(() => {
@@ -34,7 +66,7 @@ test('vantage undefined', async t => {
   t.is(stripAnsi(result), undefined)
 })
 
-test('vantage not defined', async t => {
+test('Call an undefined variable', async t => {
   const vantage = new Vantage().use(repl)
 
   const error = await t.throws(
@@ -47,7 +79,7 @@ test('vantage not defined', async t => {
   t.is(error.message, 'foobar is not defined')
 })
 
-test('vantage another mode', async t => {
+test('Using another command name', async t => {
   const vantage = new Vantage().use(repl, {
     mode: 'awesome-repl',
     context: { awesome: '9000' }
@@ -60,7 +92,7 @@ test('vantage another mode', async t => {
   t.is(stripAnsi(result), '9000')
 })
 
-test('vantage without context', async t => {
+test('Using no defined context', async t => {
   const vantage = new Vantage().use(repl)
 
   const result = await vantage.exec('repl').then(() => {
@@ -70,7 +102,7 @@ test('vantage without context', async t => {
   t.is(stripAnsi(result), 54)
 })
 
-test('vantage string', async t => {
+test('Get a string from context', async t => {
   const vantage = new Vantage().use(repl, { context: { awesome: '9000' } })
 
   const result = await vantage.exec('repl').then(() => {
@@ -80,7 +112,7 @@ test('vantage string', async t => {
   t.is(stripAnsi(result), '9000')
 })
 
-test('vantage number', async t => {
+test('Get a number from context', async t => {
   const vantage = new Vantage().use(repl, { context: { awesome: 9000 } })
 
   const result = await vantage.exec('repl').then(() => {
@@ -90,7 +122,7 @@ test('vantage number', async t => {
   t.is(stripAnsi(result), 9000)
 })
 
-test('vantage array', async t => {
+test('Get an array from context', async t => {
   const vantage = new Vantage().use(repl, {
     context: { awesome: [{ a: 9000 }] }
   })
@@ -99,20 +131,23 @@ test('vantage array', async t => {
     return vantage.exec('Promise.resolve(awesome)')
   })
 
-  t.truthy(result)
+  t.is(typeof result, 'object')
+  t.true(Array.isArray(result))
+  t.is(result[0].a, 9000)
 })
 
-test('vantage object', async t => {
+test('Get an object from context', async t => {
   const vantage = new Vantage().use(repl, { context: { awesome: { a: 9000 } } })
 
   const result = await vantage.exec('repl').then(() => {
     return vantage.exec('Promise.resolve(awesome)')
   })
 
-  t.truthy(result)
+  t.is(typeof result, 'object')
+  t.is(result.a, 9000)
 })
 
-test('vantage function', async t => {
+test('Get a function from context', async t => {
   const vantage = new Vantage().use(repl, {
     context: {
       awesome(a, b) {
@@ -125,10 +160,27 @@ test('vantage function', async t => {
     return vantage.exec('Promise.resolve(awesome)')
   })
 
-  t.truthy(result)
+  t.is(typeof result, 'function')
+  t.is(result(2, 3), 6)
 })
 
-test('define variable', async t => {
+test('Using a function from context', async t => {
+  const vantage = new Vantage().use(repl, {
+    context: {
+      awesome(a, b) {
+        return a * b
+      }
+    }
+  })
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('Promise.resolve(awesome(2, 3))')
+  })
+
+  t.is(result, 6)
+})
+
+test('Define a variable using let', async t => {
   const vantage = new Vantage().use(repl)
 
   const result = await vantage
@@ -143,7 +195,37 @@ test('define variable', async t => {
   t.is(stripAnsi(result), 100)
 })
 
-test('define variable with desctructuring', async t => {
+test('Define a variable using const', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage
+    .exec('repl')
+    .then(() => {
+      return vantage.exec('const a = 100')
+    })
+    .then(() => {
+      return vantage.exec('a')
+    })
+
+  t.is(stripAnsi(result), 100)
+})
+
+test('Define a variable using var', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage
+    .exec('repl')
+    .then(() => {
+      return vantage.exec('var a = 100')
+    })
+    .then(() => {
+      return vantage.exec('a')
+    })
+
+  t.is(stripAnsi(result), 100)
+})
+
+test('Define a variable using object destructuring', async t => {
   const vantage = new Vantage().use(repl)
 
   const result = await vantage
@@ -158,7 +240,7 @@ test('define variable with desctructuring', async t => {
   t.is(stripAnsi(result), 1)
 })
 
-test('console.log', async t => {
+test('Use console.log', async t => {
   const vantage = new Vantage().use(repl)
 
   const result = await vantage.exec('repl').then(() => {
@@ -166,4 +248,29 @@ test('console.log', async t => {
   })
 
   t.is(result, undefined)
+})
+
+test('Using lodash', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec('_.random(1, 100)')
+  })
+
+  t.true(result > 0)
+})
+
+test('Using Promise', async t => {
+  const vantage = new Vantage().use(repl)
+
+  const result = await vantage.exec('repl').then(() => {
+    return vantage.exec(
+      'Promise.all([Promise.resolve(1), Promise.resolve(2).delay(1000)])'
+    )
+  })
+
+  t.is(typeof result, 'object')
+  t.true(Array.isArray(result))
+  t.is(result[0], 1)
+  t.is(result[1], 2)
 })

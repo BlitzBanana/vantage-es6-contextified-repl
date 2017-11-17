@@ -1,3 +1,18 @@
 {
-  "presets": ["env", "@ava/stage-4"]
+  "env": {
+    "build": {
+      "presets": [
+        [
+          "env",
+          {
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": ["external-helpers"]
+    },
+    "test": {
+      "presets": ["@ava/stage-4"]
+    }
+  }
 }
