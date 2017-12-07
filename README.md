@@ -69,7 +69,8 @@ new Vantage()
 * `compiler` - the code transformation functon, set `null` or a functon using signature `function(code:string)` and that returns a `string`, the default function uses Babel.
 * `formatter` - the output transformation functon, set `highlight`, `none` or a functon using signature `function(input:string)` and that returns a `string`, default to `highlight`.
 
-> TODO: Multiline support
+> TODO: Multiline input support
+
 > TODO: Make an option to use a custom or predefined theme for `highlight` formatter
 
 
