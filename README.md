@@ -70,7 +70,7 @@ new Vantage()
 * `formatter` - the output transformation functon, set `highlight`, `none` or a functon using signature `function(input:string)` and that returns a `string`, default to `highlight`.
 
 > TODO: Multiline input support
-
+>
 > TODO: Make an option to use a custom or predefined theme for `highlight` formatter
 
 
